@@ -166,6 +166,17 @@ class GeminiService {
     );
 
     if (response.statusCode != 200) {
+      // If Groq fails, provide helpful error
+      if (response.statusCode == 401) {
+        throw Exception(
+          'Groq API key is invalid. Please:\n'
+          '1. Visit https://console.groq.com/keys\n'
+          '2. Create a new API key\n'
+          '3. Update GROQ_API_KEY in .env file\n'
+          '4. Restart the app\n\n'
+          'Or wait a few minutes for Gemini quota to reset.'
+        );
+      }
       throw Exception('Groq API error: ${response.statusCode} ${response.body}');
     }
 
